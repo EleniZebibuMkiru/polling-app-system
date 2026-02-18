@@ -23,19 +23,12 @@ A full-stack online polling application built using React.js, Node.js, Express.j
 ### Backend (server)
 - REST APIs: register, login, get polls, vote, get results, admin actions
 - Models: Users, Polls, Options, Votes
-
-## 7-Day Timeline
-
-| Day | Focus | Outcome |
-|-----|-------|--------|
-| Day 1 | Planning & setup | GitHub repo ready, folders created, project planned |
-| Day 2 | Frontend | Build pages + components |
-| Day 3 | Frontend | Add interactivity & responsive styling |
-| Day 4 | Backend | Setup APIs & Postman testing |
-| Day 5 | Backend | Full API logic & validation |
-| Day 6 | Database | Tables created & backend integrated |
-| Day 7 | Testing | Full project tested & final fixes |
-
- 
-
-
+| Day       | Focus Area           | Expected Outcome                                                                   |
+| --------- | -------------------- | ---------------------------------------------------------------------------------- |
+| **Day 1** | Planning & Setup     | GitHub repository created, project folders structured, system requirements planned |
+| **Day 2** | Frontend Development | Main pages (Home, Login, Register, Poll List) and reusable UI components built     |
+| **Day 3** | Frontend Enhancement | Interactivity added using JavaScript/React, responsive styling implemented         |
+| **Day 4** | Database Setup       | Database tables created and connected with backend                                 |
+| **Day 5** | Backend Development  | Complete API logic implemented with validation                                     |
+| **Day 6** | API Integration      | APIs connected to frontend and tested using Postman                                |
+| **Day 7** | Testing & Debugging  | Full system tested, bugs fixed, final deployment ready                             |
