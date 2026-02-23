@@ -1,0 +1,84 @@
+/* Profile Page Background */
+.profile-container {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #3B82F6, #60A5FA);
+  padding: 2rem;
+}
+
+/* Card */
+.profile-card {
+  background: #ffffff;
+  padding: 40px 35px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.profile-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Title */
+.profile-title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 25px;
+  color: #1E40AF;
+}
+
+/* Info Section */
+.profile-info {
+  margin-bottom: 25px;
+}
+
+/* Each Row */
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+/* Labels */
+.label {
+  font-weight: 600;
+  color: #374151;
+}
+
+/* Values */
+.value {
+  color: #111827;
+  font-weight: 500;
+}
+
+/* Role Highlight */
+.value.role {
+  background: #DBEAFE;
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: #1E3A8A;
+  font-size: 0.85rem;
+}
+
+/* Logout Button */
+.logout-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #DC2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #B91C1C;
+  transform: scale(1.02);
+}

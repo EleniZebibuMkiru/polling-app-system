@@ -1,0 +1,80 @@
+/* manageUsers.css */
+
+.manage-users-container {
+  font-family: Arial, sans-serif;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+  padding-bottom: 50px;
+}
+
+/* Page heading */
+.manage-users-container h1 {
+  text-align: center;
+  color: #333;
+  margin: 20px 0;
+}
+
+/* Individual user card */
+.user-card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px auto;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  max-width: 700px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s;
+}
+
+.user-card:hover {
+  transform: scale(1.02);
+}
+
+/* User info section */
+.user-info p {
+  margin: 2px 0;
+  color: #555;
+}
+
+.user-info strong {
+  color: #222;
+}
+
+/* Action buttons container */
+.user-actions button {
+  margin-left: 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+/* Hover effects for buttons */
+.user-actions button:hover {
+  opacity: 0.9;
+}
+
+/* Specific button colors */
+.user-actions .ban {
+  background-color: #f59e0b;
+  color: #fff;
+}
+
+.user-actions .unban {
+  background-color: #10b981;
+  color: #fff;
+}
+
+.user-actions .reset {
+  background-color: #3b82f6;
+  color: #fff;
+}
+
+.user-actions .delete {
+  background-color: #ef4444;
+  color: #fff;
+}

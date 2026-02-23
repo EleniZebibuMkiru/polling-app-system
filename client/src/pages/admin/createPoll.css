@@ -1,0 +1,74 @@
+/* src/styles/createPoll.css */
+
+/* Container for the page content */
+.create-poll-container {
+  max-width: 700px;
+  margin: 30px auto;
+  background-color: #f7f9fc;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+}
+
+/* Heading */
+.create-poll-container h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 25px;
+}
+
+/* Form elements */
+.create-poll-container form input,
+.create-poll-container form select {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.create-poll-container form input:focus,
+.create-poll-container form select:focus {
+  border-color: #3498db;
+}
+
+/* Buttons */
+.create-poll-container button {
+  cursor: pointer;
+  font-weight: bold;
+  border: none;
+  transition: background-color 0.2s;
+  border-radius: 6px;
+}
+
+.create-poll-container button[type="button"] {
+  background-color: #bdc3c7;
+  color: #2c3e50;
+  padding: 8px 12px;
+  margin-bottom: 15px;
+}
+
+.create-poll-container button[type="button"]:hover {
+  background-color: #95a5a6;
+}
+
+.create-poll-container button[type="submit"] {
+  background-color: #3498db;
+  color: #fff;
+  padding: 10px 15px;
+  width: 100%;
+  font-size: 1rem;
+}
+
+.create-poll-container button[type="submit"]:hover {
+  background-color: #2980b9;
+}
+
+/* Optional: input spacing between multiple options */
+.create-poll-container form input + input {
+  margin-top: 8px;
+}

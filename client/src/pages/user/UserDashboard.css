@@ -1,0 +1,27 @@
+/* userDashboard.css */
+
+/* Center all dashboard content */
+.dashboard-container {
+  display: flex;
+  flex-direction: column; /* stack vertically */
+  align-items: center;    /* center horizontally */
+  justify-content: center; /* optional, center vertically if you want */
+  padding: 2rem;
+}
+
+/* Style the main title */
+.dashboard-container h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center; /* ensure text is centered */
+}
+
+/* Optional: make PollCards centered */
+.dashboard-container .polls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* space between cards */
+  width: 100%;
+  max-width: 600px; /* optional max width */
+}

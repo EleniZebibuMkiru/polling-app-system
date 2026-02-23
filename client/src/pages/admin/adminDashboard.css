@@ -1,0 +1,97 @@
+/* adminDashboard.css */
+
+/* Main container for dashboard */
+.admin-dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9fafb; /* light gray background */
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+/* Header */
+.admin-dashboard h1 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #111827; /* dark text */
+}
+
+/* Cards grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+/* Individual card */
+.dashboard-card {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.dashboard-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+
+/* Card title */
+.dashboard-card h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #374151;
+}
+
+/* Card value */
+.dashboard-card p {
+  font-size: 22px;
+  font-weight: bold;
+  color: #1f2937;
+}
+
+/* Action buttons container */
+.dashboard-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+/* Buttons */
+.dashboard-actions a {
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: #ffffff;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.dashboard-actions a.create-btn {
+  background-color: #3b82f6; /* blue */
+}
+
+.dashboard-actions a.create-btn:hover {
+  background-color: #2563eb;
+}
+
+.dashboard-actions a.manage-btn {
+  background-color: #10b981; /* green */
+}
+
+.dashboard-actions a.manage-btn:hover {
+  background-color: #059669;
+}
+
+.dashboard-actions a.users-btn {
+  background-color: #8b5cf6; /* purple */
+}
+
+.dashboard-actions a.users-btn:hover {
+  background-color: #7c3aed;
+}

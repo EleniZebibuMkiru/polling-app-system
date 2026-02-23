@@ -1,0 +1,53 @@
+/* pollCard.css */
+
+/* Card container */
+.poll-card {
+  background-color: #ffffff; /* white card */
+  border-radius: 1rem;       /* rounded corners */
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* subtle shadow */
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hover effect */
+.poll-card:hover {
+  transform: translateY(-3px);   /* lift slightly */
+  box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+}
+
+/* Poll question */
+.poll-card h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333;
+  text-align: center;  /* center the question */
+}
+
+/* Options preview (optional) */
+.poll-card ul {
+  list-style-type: disc;
+  list-style-position: inside;
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+/* Vote button */
+.poll-card button {
+  background-color: #4f46e5;   /* indigo */
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-self: center; /* center button horizontally */
+}
+
+/* Hover effect on button */
+.poll-card button:hover {
+  background-color: #6366f1; /* lighter indigo on hover */
+  transform: scale(1.05);
+}
