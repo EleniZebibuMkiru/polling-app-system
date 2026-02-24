@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from "react";
 import AdminNavbar from "../../components/admin/AdminNavbar";
-import "./managePolls.css"; // ✅ Import CSS for styling
+import "./managePolls.css";
 
 function ManagePolls() {
   const [polls, setPolls] = useState([]);
 
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("polls")) || [];
-    setPolls(stored);
+    const normalized = stored.map(p => ({
+      id: p.id,
+      question: p.question,
+      options: p.options.map(o => typeof o === "object" ? o.text : o),
+      votes: p.votes || p.options.map(() => 0),
+      votedUsers: p.votedUsers || [],
+      status: p.status || "active"
+    }));
+
+    setPolls(normalized);
+    localStorage.setItem("polls", JSON.stringify(normalized));
   }, []);
 
   const handleDelete = (id) => {
@@ -17,10 +27,8 @@ function ManagePolls() {
   };
 
   const toggleStatus = (id) => {
-    const updated = polls.map(p =>
-      p.id === id
-        ? { ...p, status: p.status === "active" ? "closed" : "active" }
-        : p
+    const updated = polls.map(p => 
+      p.id === id ? { ...p, status: p.status === "active" ? "closed" : "active" } : p
     );
     setPolls(updated);
     localStorage.setItem("polls", JSON.stringify(updated));
@@ -29,7 +37,6 @@ function ManagePolls() {
   return (
     <div className="manage-polls-container">
       <AdminNavbar />
-
       <h1>Manage Polls</h1>
 
       {polls.length === 0 && <p style={{ textAlign: "center" }}>No polls created yet.</p>}
@@ -38,19 +45,14 @@ function ManagePolls() {
         <div key={p.id} className="poll-card">
           <h3>{p.question}</h3>
           <p>Status: {p.status}</p>
+          <p>Total Votes: {p.votes.reduce((a, b) => a + b, 0)}</p>
 
           <div className="poll-actions">
-            <button
-              onClick={() => toggleStatus(p.id)}
-              className="toggle"
-            >
+            <button onClick={() => toggleStatus(p.id)} className="toggle">
               {p.status === "active" ? "Close" : "Reopen"}
             </button>
 
-            <button
-              onClick={() => handleDelete(p.id)}
-              className="delete"
-            >
+            <button onClick={() => handleDelete(p.id)} className="delete">
               Delete
             </button>
           </div>
