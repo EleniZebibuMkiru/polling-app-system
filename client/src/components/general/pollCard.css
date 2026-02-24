@@ -26,12 +26,27 @@
   text-align: center;  /* center the question */
 }
 
-/* Options preview (optional) */
+/* Options list */
 .poll-card ul {
-  list-style-type: disc;
-  list-style-position: inside;
+  list-style-type: none; /* remove bullet */
+  margin: 0;
+  padding: 0;
   margin-bottom: 1rem;
+}
+
+/* Each option */
+.poll-card li {
+  margin-bottom: 0.75rem;
   color: #555;
+  font-size: 0.95rem;
+}
+
+/* Vote percentage bar */
+.poll-card .vote-bar {
+  height: 10px;
+  border-radius: 5px;
+  margin-top: 3px;
+  transition: width 0.5s ease, background-color 0.5s ease;
 }
 
 /* Vote button */

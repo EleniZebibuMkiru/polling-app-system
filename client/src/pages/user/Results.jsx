@@ -1,26 +1,68 @@
+// src/pages/user/Results.jsx
 import React from "react";
-import { polls } from "../../data/Data"; // make sure this path is correct
-import "./Results.css";
+import { polls } from "../../data/Data"; // fallback
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 function Results() {
+  const storedPolls = JSON.parse(localStorage.getItem("polls")) || polls;
+
+  // Function to generate color based on percentage
+  const getColor = (percentage, max) => {
+    // Highest percentage gets green, others gradient from blue to red
+    if (percentage === max) return "#16a34a"; // green
+    // interpolate between red (low) to blue (high)
+    const red = 255 - Math.floor((percentage / 100) * 200);
+    const blue = Math.floor((percentage / 100) * 200);
+    return `rgb(${red}, 0, ${blue})`;
+  };
+
   return (
-    <div className="results-container">
-      <h1>Poll Results</h1>
+    <div style={{ maxWidth: "800px", margin: "2rem auto", padding: "1rem" }}>
+      <h1 style={{ textAlign: "center", color: "#4f46e5" }}>Poll Results</h1>
 
-      {polls.map((poll) => {
+      {storedPolls.map((poll) => {
+        const totalVotes = poll.votes.reduce((a, b) => a + b, 0);
         const maxVotes = Math.max(...poll.votes);
-        return (
-          <div key={poll.id} className="poll-result-card">
-            <h2>{poll.question}</h2>
 
-            {poll.options.map((opt, i) => (
-              <p
-                key={i}
-                className={poll.votes[i] === maxVotes ? "most-votes" : ""}
-              >
-                {opt}: {poll.votes[i]} votes
-              </p>
-            ))}
+        const data = {
+          labels: poll.options,
+          datasets: [
+            {
+              label: "Votes",
+              data: poll.votes,
+              backgroundColor: poll.votes.map((v) =>
+                getColor(totalVotes > 0 ? (v / totalVotes) * 100 : 0, maxVotes)
+              ),
+            },
+          ],
+        };
+
+        const options = {
+          indexAxis: "y", // horizontal bars
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            title: { display: true, text: `${poll.question}` },
+          },
+          scales: {
+            x: { beginAtZero: true },
+          },
+        };
+
+        return (
+          <div key={poll.id} style={{ marginBottom: "2rem" }}>
+            <Bar data={data} options={options} />
           </div>
         );
       })}

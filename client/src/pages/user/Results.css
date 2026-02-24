@@ -37,15 +37,43 @@
   color: #333;
 }
 
-/* Votes list */
-.poll-result-card p {
-  font-size: 1rem;
-  color: #555;
-  margin: 0.25rem 0;
+/* Individual option container */
+.result-option {
+  margin-bottom: 0.75rem;
 }
 
-/* Optional: highlight most voted option */
-.poll-result-card p.most-votes {
+/* Option label */
+.result-option span {
+  display: block;
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+/* Bar container */
+.result-option .bar-container {
+  width: 100%;
+  height: 20px;
+  background: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Bar fill */
+.result-option .bar-fill {
+  height: 100%;
+  background: #4f46e5; /* default indigo */
+  border-radius: 10px 0 0 10px;
+  transition: width 0.5s ease-in-out;
+}
+
+/* Most voted option */
+.poll-result-card p.most-votes,
+.result-option.most-votes span {
   font-weight: 600;
-  color: #16a34a; /* green */
+  color: #16a34a; /* green highlight */
+}
+
+.result-option.most-votes .bar-fill {
+  background: #16a34a; /* green fill for leading option */
 }

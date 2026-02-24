@@ -3,14 +3,12 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/Form.css";
 
 function Login({ setUser }) {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!email || !password) {
       alert("Please fill all fields!");
       return;
@@ -20,27 +18,25 @@ function Login({ setUser }) {
 
     // Admin login
     if (email === "admin@example.com" && password === "admin123") {
-
       loggedInUser = {
+        id: "admin-1", // static admin ID
         name: "Admin",
         email,
-        role: "admin"
+        role: "admin",
       };
-
       localStorage.setItem("currentUser", JSON.stringify(loggedInUser));
       setUser(loggedInUser);
       navigate("/admin");
     }
 
-    // User login
+    // Regular User login
     else {
-
       loggedInUser = {
+        id: crypto.randomUUID(), // unique ID for each user
         name: "User",
         email,
-        role: "user"
+        role: "user",
       };
-
       localStorage.setItem("currentUser", JSON.stringify(loggedInUser));
       setUser(loggedInUser);
       navigate("/dashboard");
