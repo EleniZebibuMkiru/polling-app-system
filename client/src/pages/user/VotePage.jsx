@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import API from "../../api";
 import "./Vote.css";
 
 function VotePage() {
@@ -7,95 +8,78 @@ function VotePage() {
   const navigate = useNavigate();
 
   const [poll, setPoll] = useState(null);
-  const [currentUser, setCurrentUser] = useState(""); // input username
-  const [hasVoted, setHasVoted] = useState(false);
-  const [usernameEntered, setUsernameEntered] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // 1️⃣ Load poll only after username is entered
+  // Fetch poll
   useEffect(() => {
-    if (!usernameEntered) return;
+    const fetchPoll = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("You must log in to vote.");
+        navigate("/login");
+        return;
+      }
 
-    const storedPolls = JSON.parse(localStorage.getItem("polls")) || [];
-    const normalizedPolls = storedPolls.map(p => ({
-      id: p.id,
-      question: p.question,
-      options: p.options.map(o => (typeof o === "object" ? o.text : o)),
-      votes: p.votes || p.options.map(() => 0),
-      votedUsers: p.votedUsers || [],
-      status: p.status || "active"
-    }));
+      try {
+        const res = await API.get(`/polls/${id}`);
+        setPoll(res.data);
+      } catch (err) {
+        console.error(err.response?.data?.message || err.message);
+        if (err.response?.status === 401) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("currentUser");
+          navigate("/login");
+        } else {
+          alert(err.response?.data?.message || "Error fetching poll");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPoll();
+  }, [id, navigate]);
 
-    localStorage.setItem("polls", JSON.stringify(normalizedPolls));
+  const handleVote = async () => {
+    if (!selectedOption) return alert("Please select an option!");
+    setLoading(true);
 
-    const foundPoll = normalizedPolls.find(p => p.id.toString() === id);
-    if (!foundPoll) return;
-
-    setPoll(foundPoll);
-    setHasVoted(foundPoll.votedUsers.includes(currentUser));
-  }, [usernameEntered, currentUser, id]);
-
-  const handleStart = () => {
-    if (!currentUser) return alert("Please enter your name");
-    setUsernameEntered(true);
+    try {
+      await API.post("/polls/vote", { optionId: selectedOption });
+      alert("Vote submitted successfully!");
+      navigate(`/results/${id}`);
+    } catch (err) {
+      console.error(err.response?.data?.message || err.message);
+      if (err.response?.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("currentUser");
+        navigate("/login");
+      } else {
+        alert(err.response?.data?.message || "Error submitting vote");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleVote = (optionIndex) => {
-    if (!poll || !currentUser) return;
-    if (poll.status === "closed") return alert("This poll is closed.");
-    if (poll.votedUsers.includes(currentUser)) return alert("You have already voted.");
-
-    const storedPolls = JSON.parse(localStorage.getItem("polls")) || [];
-    const pollIndex = storedPolls.findIndex(p => p.id.toString() === poll.id.toString());
-
-    storedPolls[pollIndex].votes[optionIndex] += 1;
-    storedPolls[pollIndex].votedUsers.push(currentUser);
-
-    localStorage.setItem("polls", JSON.stringify(storedPolls));
-    setHasVoted(true);
-
-    alert(`You voted for: ${poll.options[optionIndex]}`);
-    navigate("/results");
-  };
-
-  if (!usernameEntered) {
-    return (
-      <div className="vote-container">
-        <div className="vote-card">
-          <h2>Enter your name to vote</h2>
-          <input
-            type="text"
-            placeholder="Your name"
-            value={currentUser}
-            onChange={(e) => setCurrentUser(e.target.value)}
-          />
-          <button onClick={handleStart}>Start Voting</button>
-        </div>
-      </div>
-    );
-  }
-
-  if (!poll) return <p className="vote-notfound">Poll not found!</p>;
+  if (loading) return <p>Loading poll...</p>;
+  if (!poll) return <p>Poll not found!</p>;
 
   return (
     <div className="vote-container">
-      <div className="vote-card">
-        <h2 className="vote-title">{poll.question}</h2>
-        <div className="vote-options">
-          {poll.options.map((opt, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleVote(idx)}
-              className="vote-option-btn"
-              disabled={hasVoted || poll.status === "closed"}
-            >
-              {opt}
-            </button>
-          ))}
-        </div>
-
-        {hasVoted && <p className="vote-warning">You have already voted.</p>}
-        {poll.status === "closed" && <p className="vote-warning">This poll is closed.</p>}
-      </div>
+      <h2>{poll.question}</h2>
+      {poll.options?.map((opt) => (
+        <label key={opt.id}>
+          <input
+            type="radio"
+            name="option"
+            value={opt.id}
+            onChange={() => setSelectedOption(opt.id)}
+          />
+          {opt.option_text}
+        </label>
+      ))}
+      <button onClick={handleVote}>Submit Vote</button>
     </div>
   );
 }

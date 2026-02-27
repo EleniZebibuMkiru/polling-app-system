@@ -1,60 +1,72 @@
-import React from "react";
-import { Bar } from "react-chartjs-2";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import API from "../../api";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
   Tooltip,
-  Legend
-} from "chart.js";
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+  CartesianGrid,
+  ResponsiveContainer,
+} from "recharts";
+import "./Results.css";
 
 function Results() {
-  const storedPolls = JSON.parse(localStorage.getItem("polls")) || [];
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [poll, setPoll] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const getColor = (percentage, max) => {
-    if (percentage === max) return "#16a34a";
-    const red = 255 - Math.floor((percentage / 100) * 200);
-    const blue = Math.floor((percentage / 100) * 200);
-    return `rgb(${red}, 0, ${blue})`;
-  };
+  useEffect(() => {
+    const fetchResults = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("You must log in to view results.");
+        navigate("/login");
+        return;
+      }
+
+      try {
+        const res = await API.get(`/polls/results/${id}`);
+        setPoll(res.data);
+      } catch (err) {
+        console.error(err.response?.data?.message || err.message);
+        if (err.response?.status === 401) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("currentUser");
+          navigate("/login");
+        } else {
+          alert(err.response?.data?.message || "Error fetching results");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchResults();
+  }, [id, navigate]);
+
+  if (loading) return <p>Loading results...</p>;
+  if (!poll) return <p>Poll not found!</p>;
+
+  const chartData = poll.options.map((opt) => ({
+    name: opt.option_text,
+    votes: opt.votes,
+  }));
 
   return (
-    <div style={{ maxWidth: "800px", margin: "2rem auto", padding: "1rem" }}>
-      <h1 style={{ textAlign: "center", color: "#4f46e5" }}>Poll Results</h1>
-
-      {storedPolls.map(poll => {
-        const totalVotes = poll.votes.reduce((a, b) => a + b, 0);
-        const maxVotes = Math.max(...poll.votes);
-
-        const data = {
-          labels: poll.options,
-          datasets: [
-            {
-              label: "Votes",
-              data: poll.votes,
-              backgroundColor: poll.votes.map(v =>
-                getColor(totalVotes > 0 ? (v / totalVotes) * 100 : 0, maxVotes)
-              )
-            }
-          ]
-        };
-
-        const options = {
-          indexAxis: "y",
-          responsive: true,
-          plugins: {
-            legend: { display: false },
-            title: { display: true, text: poll.question }
-          },
-          scales: { x: { beginAtZero: true } }
-        };
-
-        return <div key={poll.id} style={{ marginBottom: "2rem" }}><Bar data={data} options={options} /></div>;
-      })}
+    <div className="results-container">
+      <h2>{poll.question}</h2>
+      <p>Total Votes: {poll.totalVotes}</p>
+      <ResponsiveContainer width="100%" height={300}>
+        <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis allowDecimals={false} />
+          <Tooltip />
+          <Bar dataKey="votes" fill="#8884d8" />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 }

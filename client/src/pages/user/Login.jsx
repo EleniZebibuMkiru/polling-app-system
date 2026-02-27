@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../../api";
 import "../../styles/Form.css";
 
 function Login({ setUser }) {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); // Loading state
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email || !password) {
@@ -16,45 +17,35 @@ function Login({ setUser }) {
       return;
     }
 
-    let loggedInUser;
+    setLoading(true);
 
-    // Admin login
-    if (email === "admin@example.com" && password === "admin123") {
+    try {
+      const res = await API.post("/auth/login", { email, password });
 
-      loggedInUser = {
-        name: "Admin",
-        email,
-        role: "admin"
-      };
+      // Save token and user in localStorage
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("currentUser", JSON.stringify(res.data.user));
 
-    localStorage.setItem("currentUser", JSON.stringify(loggedInUser));
-      setUser(loggedInUser);
-      navigate("/admin");
+      setUser(res.data.user);
+
+      // Navigate based on role
+      if (res.data.user.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      console.error(err.response?.data || err.message);
+      alert(err.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
-
-    // User login
-    else {
-
-      loggedInUser = {
-        name: "User",
-        email,
-        role: "user"
-      };
-
-      localStorage.setItem("currentUser", JSON.stringify(loggedInUser));
-      setUser(loggedInUser);
-      navigate("/dashboard");
-    }
-
-    setEmail("");
-    setPassword("");
   };
 
   return (
     <div className="form-container">
       <form onSubmit={handleSubmit} className="form-box">
         <h2>Login</h2>
-
         <label>Email</label>
         <input
           type="email"
@@ -62,7 +53,6 @@ function Login({ setUser }) {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="example@mail.com"
         />
-
         <label>Password</label>
         <input
           type="password"
@@ -70,8 +60,9 @@ function Login({ setUser }) {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
         />
-
-        <button type="submit">Login</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
       </form>
     </div>
   );

@@ -1,58 +1,42 @@
 import React, { useEffect, useState } from "react";
+import API from "../../api";
 
 function PollHistory() {
+  const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const [polls, setPolls] = useState([]);
-  const [votedPolls, setVotedPolls] = useState([]);
-
-  const currentUser = JSON.parse(localStorage.getItem("user"));
+  const fetchHistory = async () => {
+    try {
+      const res = await API.get("/votes/history");
+      setHistory(res.data);
+    } catch (err) {
+      console.error(err.response?.data?.message || err.message);
+      alert(err.response?.data?.message || "Error fetching poll history");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const storedPolls = JSON.parse(localStorage.getItem("polls")) || [];
-    setPolls(storedPolls);
-
-    // filter polls the user voted
-    const history = storedPolls.filter(poll =>
-      poll.votedUsers?.includes(currentUser?.email)
-    );
-
-    setVotedPolls(history);
-
+    fetchHistory();
   }, []);
 
+  if (loading) return <p>Loading history...</p>;
+
+  if (!history.length)
+    return <p>You have not voted on any poll yet.</p>;
+
   return (
-    <div className="p-6">
-
-      <h1 className="text-2xl font-bold mb-4">
-        My Poll History
-      </h1>
-
-      {
-        votedPolls.length === 0 ? (
-          <p>You have not voted on any poll yet.</p>
-        ) : (
-          votedPolls.map(poll => (
-            <div
-              key={poll.id}
-              className="border p-4 rounded mb-4 shadow"
-            >
-              <h2 className="text-lg font-semibold">
-                {poll.question}
-              </h2>
-
-              {
-                poll.options.map((opt, index) => (
-                  <p key={index}>
-                    {opt.text} : {opt.votes} votes
-                  </p>
-                ))
-              }
-
-            </div>
-          ))
-        )
-      }
-
+    <div>
+      <h2>My Poll History</h2>
+      <ul>
+        {history.map((vote) => (
+          <li key={vote.poll_id + vote.voted_at}>
+            <strong>{vote.question}</strong> — You voted: {vote.option_text} <br />
+            <small>{new Date(vote.voted_at).toLocaleString()}</small>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

@@ -1,70 +1,68 @@
-import React, { useState } from "react";
-import AdminNavbar from "../../components/admin/AdminNavbar";
-import "./manageUsers.css"; // ✅ Import CSS for styling
-
-// Mock users
-const initialUsers = [
-  { id: 1, name: "John Doe", email: "john@example.com", banned: false },
-  { id: 2, name: "Jane Smith", email: "jane@example.com", banned: false },
-  { id: 3, name: "Bob Johnson", email: "bob@example.com", banned: true },
-];
+// src/pages/admin/ManageUsers.jsx
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import API from "../../api";
 
 function ManageUsers() {
-  const [users, setUsers] = useState(initialUsers);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const toggleBan = (id) => {
-    setUsers(users.map(u => u.id === id ? { ...u, banned: !u.banned } : u));
-  };
-
-  const deleteUser = (id) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
-      setUsers(users.filter(u => u.id !== id));
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const res = await API.get("/users"); // token auto-attached
+      setUsers(res.data);
+    } catch (err) {
+      console.error(err.response?.data?.message || err.message);
+      setError(err.response?.data?.message || "Error fetching users");
+      if (err.response?.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("currentUser");
+        navigate("/login");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
-  const resetVotes = (id) => {
-    alert(`Votes for user ID ${id} have been reset! (mock)`);
-  };
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  if (loading) return <p>Loading users...</p>;
+  if (error) return <p className="error">{error}</p>;
 
   return (
-    <div className="manage-users-container">
-      <AdminNavbar />
-
-      <h1>Manage Users</h1>
-
-      <div className="space-y-3">
-        {users.map(user => (
-          <div key={user.id} className="user-card">
-            <div className="user-info">
-              <p><strong>{user.name}</strong> ({user.email})</p>
-              <p>Status: {user.banned ? "Banned" : "Active"}</p>
-            </div>
-
-            <div className="user-actions">
-              <button
-                onClick={() => toggleBan(user.id)}
-                className={user.banned ? "unban" : "ban"}
-              >
-                {user.banned ? "Unban" : "Ban"}
-              </button>
-
-              <button
-                onClick={() => resetVotes(user.id)}
-                className="reset"
-              >
-                Reset Votes
-              </button>
-
-              <button
-                onClick={() => deleteUser(user.id)}
-                className="delete"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+    <div>
+      <h2>All Users</h2>
+      {users.length === 0 ? (
+        <p>No users found.</p>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Created At</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((u) => (
+              <tr key={u.id}>
+                <td>{u.id}</td>
+                <td>{u.name}</td>
+                <td>{u.email}</td>
+                <td>{u.role}</td>
+                <td>{u.created_at}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

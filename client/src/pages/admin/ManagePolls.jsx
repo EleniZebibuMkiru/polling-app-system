@@ -1,38 +1,61 @@
+// src/pages/admin/ManagePolls.jsx
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AdminNavbar from "../../components/admin/AdminNavbar";
+import API from "../../api";
 import "./managePolls.css";
 
 function ManagePolls() {
   const [polls, setPolls] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const fetchPolls = async () => {
+    try {
+      setLoading(true);
+      const res = await API.get("/polls"); // token auto-attached
+      setPolls(res.data);
+    } catch (err) {
+      console.error(err.response?.data?.message || err.message);
+      setError(err.response?.data?.message || "Error fetching polls");
+      if (err.response?.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("currentUser");
+        navigate("/login");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("polls")) || [];
-    const normalized = stored.map(p => ({
-      id: p.id,
-      question: p.question,
-      options: p.options.map(o => typeof o === "object" ? o.text : o),
-      votes: p.votes || p.options.map(() => 0),
-      votedUsers: p.votedUsers || [],
-      status: p.status || "active"
-    }));
-
-    setPolls(normalized);
-    localStorage.setItem("polls", JSON.stringify(normalized));
+    fetchPolls();
   }, []);
 
-  const handleDelete = (id) => {
-    const updated = polls.filter(p => p.id !== id);
-    setPolls(updated);
-    localStorage.setItem("polls", JSON.stringify(updated));
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this poll?")) return;
+
+    try {
+      await API.delete(`/polls/${id}`);
+      setPolls(polls.filter((p) => p.id !== id));
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to delete poll");
+    }
   };
 
-  const toggleStatus = (id) => {
-    const updated = polls.map(p => 
-      p.id === id ? { ...p, status: p.status === "active" ? "closed" : "active" } : p
-    );
-    setPolls(updated);
-    localStorage.setItem("polls", JSON.stringify(updated));
+  const toggleStatus = async (poll) => {
+    try {
+      const newStatus = poll.status === "active" ? "closed" : "active";
+      await API.patch(`/polls/${poll.id}/status`, { status: newStatus });
+      setPolls(polls.map((p) => (p.id === poll.id ? { ...p, status: newStatus } : p)));
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to update status");
+    }
   };
+
+  if (loading) return <p>Loading polls...</p>;
+  if (error) return <p className="error">{error}</p>;
 
   return (
     <div className="manage-polls-container">
@@ -41,20 +64,17 @@ function ManagePolls() {
 
       {polls.length === 0 && <p style={{ textAlign: "center" }}>No polls created yet.</p>}
 
-      {polls.map(p => (
+      {polls.map((p) => (
         <div key={p.id} className="poll-card">
           <h3>{p.question}</h3>
           <p>Status: {p.status}</p>
-          <p>Total Votes: {p.votes.reduce((a, b) => a + b, 0)}</p>
 
           <div className="poll-actions">
-            <button onClick={() => toggleStatus(p.id)} className="toggle">
+            <button onClick={() => navigate(`/admin/results/${p.id}`)}>View Results</button>
+            <button onClick={() => toggleStatus(p)}>
               {p.status === "active" ? "Close" : "Reopen"}
             </button>
-
-            <button onClick={() => handleDelete(p.id)} className="delete">
-              Delete
-            </button>
+            <button onClick={() => handleDelete(p.id)}>Delete</button>
           </div>
         </div>
       ))}

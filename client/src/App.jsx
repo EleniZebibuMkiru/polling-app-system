@@ -24,24 +24,23 @@ import PollResult from "./pages/admin/PollResult";
 import ManageUsers from "./pages/admin/ManageUsers";
 
 function App() {
-
   const [user, setUser] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);
 
   // Load user from localStorage
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("currentUser"));
-    if (storedUser) {
-      setUser(storedUser);
-    }
+    if (storedUser) setUser(storedUser);
+    setLoadingUser(false);
   }, []);
+
+  if (loadingUser) return <p>Loading user...</p>;
 
   return (
     <BrowserRouter>
-
       <Navbar user={user} setUser={setUser} />
 
       <Routes>
-
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register setUser={setUser} />} />
@@ -56,7 +55,6 @@ function App() {
             </UserRoute>
           }
         />
-
         <Route
           path="/vote/:id"
           element={
@@ -65,16 +63,14 @@ function App() {
             </UserRoute>
           }
         />
-
         <Route
-          path="/results"
+          path="/results/:id"
           element={
             <UserRoute user={user}>
               <Results />
             </UserRoute>
           }
         />
-
         <Route
           path="/profile"
           element={
@@ -83,7 +79,6 @@ function App() {
             </UserRoute>
           }
         />
-
         <Route
           path="/history"
           element={
@@ -93,7 +88,7 @@ function App() {
           }
         />
 
-        {/* Admin Protected */}
+        {/* Admin Protected Routes */}
         <Route
           path="/admin"
           element={
@@ -102,7 +97,6 @@ function App() {
             </AdminRoute>
           }
         />
-
         <Route
           path="/admin/create"
           element={
@@ -111,7 +105,6 @@ function App() {
             </AdminRoute>
           }
         />
-
         <Route
           path="/admin/manage"
           element={
@@ -120,16 +113,14 @@ function App() {
             </AdminRoute>
           }
         />
-
         <Route
-          path="/admin/results"
+          path="/admin/results/:id"
           element={
             <AdminRoute user={user}>
               <PollResult />
             </AdminRoute>
           }
         />
-
         <Route
           path="/admin/users"
           element={
@@ -139,12 +130,11 @@ function App() {
           }
         />
 
+        {/* Catch-all */}
         <Route path="*" element={<Home />} />
-
       </Routes>
 
       <Footer />
-
     </BrowserRouter>
   );
 }
