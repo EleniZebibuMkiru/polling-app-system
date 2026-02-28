@@ -4,7 +4,7 @@ import API from "../../api";
 import "./Vote.css";
 
 function VotePage() {
-  const { id } = useParams();
+  const { id } = useParams(); // pollId
   const navigate = useNavigate();
 
   const [poll, setPoll] = useState(null);
@@ -22,7 +22,9 @@ function VotePage() {
       }
 
       try {
-        const res = await API.get(`/polls/${id}`);
+        const res = await API.get(`/polls/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setPoll(res.data);
       } catch (err) {
         console.error(err.response?.data?.message || err.message);
@@ -44,8 +46,15 @@ function VotePage() {
     if (!selectedOption) return alert("Please select an option!");
     setLoading(true);
 
+    const token = localStorage.getItem("token");
+
     try {
-      await API.post("/polls/vote", { optionId: selectedOption });
+      await API.post(
+        "/polls/vote",
+        { pollId: id, optionId: selectedOption }, // ✅ pass pollId
+        { headers: { Authorization: `Bearer ${token}` } } // ✅ pass token
+      );
+
       alert("Vote submitted successfully!");
       navigate(`/results/${id}`);
     } catch (err) {
@@ -69,7 +78,7 @@ function VotePage() {
     <div className="vote-container">
       <h2>{poll.question}</h2>
       {poll.options?.map((opt) => (
-        <label key={opt.id}>
+        <label key={opt.id} className="vote-option">
           <input
             type="radio"
             name="option"
@@ -79,7 +88,9 @@ function VotePage() {
           {opt.option_text}
         </label>
       ))}
-      <button onClick={handleVote}>Submit Vote</button>
+      <button className="vote-btn" onClick={handleVote}>
+        Submit Vote
+      </button>
     </div>
   );
 }

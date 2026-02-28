@@ -1,84 +1,159 @@
-/* Profile Page Background */
+/* Container */
 .profile-container {
-  min-height: 80vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #3B82F6, #60A5FA);
-  padding: 2rem;
-}
-
-/* Card */
-.profile-card {
+  max-width: 600px;
+  margin: 80px auto;
+  padding: 40px 30px;
   background: #ffffff;
-  padding: 40px 35px;
   border-radius: 16px;
-  width: 100%;
-  max-width: 450px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
 }
 
-.profile-card:hover {
-  transform: translateY(-5px);
-}
-
-/* Title */
+/* Card Title */
 .profile-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 30px;
   text-align: center;
-  font-size: 1.8rem;
-  margin-bottom: 25px;
-  color: #1E40AF;
+  color: #222;
 }
 
-/* Info Section */
+/* Error / Success Messages */
+.error-msg {
+  color: #e74c3c;
+  font-weight: 500;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.success-msg {
+  color: #27ae60;
+  font-weight: 500;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* Profile Info Section */
 .profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
   margin-bottom: 25px;
 }
 
-/* Each Row */
+/* Each row */
 .profile-row {
   display: flex;
   justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid #E5E7EB;
+  padding: 14px 20px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  transition: 0.3s;
 }
 
-/* Labels */
+.profile-row:hover {
+  background: #e9ecef;
+}
+
+/* Label & Value */
 .label {
   font-weight: 600;
-  color: #374151;
+  color: #555;
 }
 
-/* Values */
 .value {
-  color: #111827;
   font-weight: 500;
+  color: #222;
 }
 
-/* Role Highlight */
 .value.role {
-  background: #DBEAFE;
-  padding: 4px 10px;
-  border-radius: 6px;
-  color: #1E3A8A;
-  font-size: 0.85rem;
+  color: #007bff;
+  font-weight: 700;
 }
 
-/* Logout Button */
-.logout-btn {
+/* Input fields */
+.profile-info input {
   width: 100%;
-  padding: 12px;
-  background-color: #DC2626;
-  color: white;
-  border: none;
+  padding: 12px 15px;
   border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.profile-info input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 6px rgba(0,123,255,0.3);
+}
+
+/* Buttons shared styles */
+.profile-card button {
+  width: 100%;
+  padding: 12px 0;
+  font-size: 16px;
   font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s ease;
+  border: none;
+  margin-top: 12px;
+  transition: 0.3s;
+}
+
+/* Edit button */
+.edit-btn {
+  background: #f1c40f;
+  color: #fff;
+}
+
+.edit-btn:hover {
+  background: #d4ac0d;
+}
+
+/* Save button */
+.save-btn {
+  background: #28a745;
+  color: #fff;
+}
+
+.save-btn:hover {
+  background: #218838;
+}
+
+/* Logout button */
+.logout-btn {
+  background: #e74c3c;
+  color: #fff;
 }
 
 .logout-btn:hover {
-  background-color: #B91C1C;
-  transform: scale(1.02);
+  background: #c0392b;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .profile-container {
+    padding: 30px 20px;
+  }
+
+  .profile-title {
+    font-size: 24px;
+  }
+
+  .profile-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .profile-info input {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  .profile-card button {
+    font-size: 14px;
+    padding: 10px 0;
+  }
 }
