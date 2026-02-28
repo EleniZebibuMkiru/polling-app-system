@@ -1,9 +1,11 @@
+// server.js
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const db = require("./config/db"); // MySQL connection
-
 const app = express();
+
+// MySQL connection
+const db = require("./config/db"); // make sure this file exports the connection
 
 // ================= MIDDLEWARE =================
 app.use(
@@ -12,24 +14,19 @@ app.use(
     credentials: true,
   })
 );
-
 app.use(express.json()); // Parse JSON requests
 
 // ================= IMPORT ROUTES =================
 const authRoutes = require("./routes/authRoutes");   // Registration & Login
 const pollRoutes = require("./routes/pollRoutes");   // Poll management
-const voteRoutes = require("./routes/voteRoutes");   // Voting actions
-const userRoutes = require("./routes/userRoutes");   // Admin: manage users
 
 // ================= ROUTES =================
 app.use("/api/auth", authRoutes);
-app.use("/api/polls", pollRoutes);
-app.use("/api/votes", voteRoutes);
-app.use("/api/users", userRoutes); // ✅ Admin users route
+app.use("/api/polls", pollRoutes); // All poll-related endpoints
 
 // ================= TEST ROUTE =================
 app.get("/", (req, res) => {
-  res.send("Polling API Running 🚀");
+  res.send("Polling API Running");
 });
 
 // ================= FALLBACK FOR UNKNOWN ROUTES =================
@@ -39,6 +36,4 @@ app.use((req, res) => {
 
 // ================= START SERVER =================
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

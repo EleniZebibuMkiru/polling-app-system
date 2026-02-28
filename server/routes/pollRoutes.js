@@ -1,14 +1,33 @@
+// routes/pollRoutes.js
 const express = require("express");
 const router = express.Router();
 const { protect } = require("../middleware/authMiddleware");
 const pollController = require("../controllers/pollController");
 
-// Poll endpoints
-router.post("/", protect, pollController.createPoll);
-router.get("/", protect, pollController.getPolls);
-router.get("/:id", protect, pollController.getPollById);
-router.post("/vote", protect, pollController.vote);
-router.get("/results/:id", protect, pollController.getPollResults);
-router.put("/:id/status", protect, pollController.toggleStatus); // toggle open/closed
+// ================= POLL ROUTES =================
 
-module.exports = router;
+// Create a new poll
+router.post("/", protect, pollController.createPoll);
+
+// Get all polls
+router.get("/", protect, pollController.getPolls);
+
+// Get a single poll by ID
+router.get("/:id", protect, pollController.getPollById);
+
+// Cast a vote
+router.post("/vote", protect, pollController.vote);
+
+// Update an existing vote
+router.put("/update-vote", protect, pollController.updateVote);
+
+// Get poll results
+router.get("/results/:id", protect, pollController.getPollResults);
+
+// Toggle poll status (open/closed)
+router.put("/:id/status", protect, pollController.toggleStatus);
+
+// Get vote history for the logged-in user
+router.get("/history", protect, pollController.getUserHistory); // ✅ critical route
+
+module.exports = router; // ✅ Export router

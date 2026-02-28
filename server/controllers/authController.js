@@ -1,4 +1,3 @@
-// controllers/authController.js
 const db = require("../config/db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -57,5 +56,43 @@ exports.loginUser = async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+};
+
+// ================= UPDATE PROFILE =================
+exports.updateProfile = async (req, res) => {
+  try {
+    // 🔹 Use req.userId populated by middleware
+    const userId = req.userId;
+    const { name, email } = req.body;
+
+    if (!name || !email)
+      return res.status(400).json({ message: "All fields are required" });
+
+    // Check for duplicate email
+    const existing = await query(
+      "SELECT * FROM users WHERE email = ? AND id != ?",
+      [email, userId]
+    );
+    if (existing.length > 0)
+      return res.status(400).json({ message: "Email already in use" });
+
+    // Update user
+    await query("UPDATE users SET name = ?, email = ? WHERE id = ?", [
+      name,
+      email,
+      userId,
+    ]);
+
+    // Fetch updated user info
+    const updatedUser = await query(
+      "SELECT id, name, email, role FROM users WHERE id = ?",
+      [userId]
+    );
+
+    res.json({ user: updatedUser[0], message: "Profile updated successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
   }
 };

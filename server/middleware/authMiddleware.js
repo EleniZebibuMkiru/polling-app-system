@@ -9,6 +9,7 @@ exports.protect = (req, res, next) => {
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+    // Populate req.userId and req.userRole for controllers
     req.userId = decoded.id;
     req.userRole = decoded.role;
 
