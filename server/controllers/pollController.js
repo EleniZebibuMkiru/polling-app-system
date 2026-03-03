@@ -222,32 +222,3 @@ exports.toggleStatus = async (req, res) => {
   }
 };
 
-// ================= GET USER VOTE HISTORY =================
-exports.getUserHistory = async (req, res) => {
-  try {
-    const userId = req.userId;
-
-    const votes = await query(
-      `SELECT v.id AS voteId, v.poll_id AS pollId, v.option_id AS optionId, p.question
-       FROM votes v
-       JOIN polls p ON v.poll_id = p.id
-       WHERE v.user_id = ?`,
-      [userId]
-    );
-
-    const history = await Promise.all(
-      votes.map(async (v) => {
-        const options = await query(
-          "SELECT id, option_text FROM options WHERE poll_id = ?",
-          [v.pollId]
-        );
-        return { ...v, options };
-      })
-    );
-
-    res.json(history);
-  } catch (err) {
-    console.error("Error in getUserHistory:", err);
-    res.status(500).json({ message: "Server error" });
-  }
-};

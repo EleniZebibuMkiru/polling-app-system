@@ -27,7 +27,7 @@ function Navbar({ user, setUser }) {
         ) : (
           <>
             <Link to="/dashboard">Dashboard</Link>
-            <Link to="/history">History</Link>
+           <Link to="/history">My Votes</Link>  
             <Link to={`/profile`}>{user.name}</Link>
             <button onClick={handleLogout}>Logout</button>
           </>

@@ -27,7 +27,4 @@ router.get("/results/:id", protect, pollController.getPollResults);
 // Toggle poll status (open/closed)
 router.put("/:id/status", protect, pollController.toggleStatus);
 
-// Get vote history for the logged-in user
-router.get("/history", protect, pollController.getUserHistory); // ✅ critical route
-
 module.exports = router; // ✅ Export router

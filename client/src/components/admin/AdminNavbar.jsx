@@ -12,7 +12,7 @@ function AdminNavbar() {
         <li><Link to="/admin/create">Create</Link></li>
         <li><Link to="/admin/manage">Polls</Link></li>
         <li><Link to="/admin/users">Users</Link></li>
-        <li><Link to="/admin/results">Results</Link></li>
+        {/* results link is not a standalone page; use the "View Results" button in Manage Polls */}
       </ul>
     </nav>
   );

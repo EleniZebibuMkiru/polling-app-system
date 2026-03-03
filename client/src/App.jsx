@@ -79,14 +79,14 @@ function App() {
             </UserRoute>
           }
         />
-        <Route
-          path="/history"
-          element={
-            <UserRoute user={user}>
-              <PollHistory />
-            </UserRoute>
-          }
-        />
+    <Route
+    path="/history"
+    element={
+      <UserRoute user={user}>
+        <PollHistory />
+      </UserRoute>
+    }
+  />
 
         {/* Admin Protected Routes */}
         <Route

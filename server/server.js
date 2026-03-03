@@ -19,10 +19,12 @@ app.use(express.json()); // Parse JSON requests
 // ================= IMPORT ROUTES =================
 const authRoutes = require("./routes/authRoutes");   // Registration & Login
 const pollRoutes = require("./routes/pollRoutes");   // Poll management
+const voteRoutes = require("./routes/voteRoutes");   // User vote history & updates
 
 // ================= ROUTES =================
 app.use("/api/auth", authRoutes);
 app.use("/api/polls", pollRoutes); // All poll-related endpoints
+app.use("/api/votes", voteRoutes); // Vote history and editing
 
 // ================= TEST ROUTE =================
 app.get("/", (req, res) => {
@@ -37,3 +39,4 @@ app.use((req, res) => {
 // ================= START SERVER =================
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
