@@ -51,6 +51,25 @@
   transition: all 0.2s;
 }
 
+/* responsive card width */
+@media (max-width: 768px) {
+  .poll-card {
+    width: 90%;
+    margin: 10px auto;
+    padding: 15px;
+  }
+
+  .poll-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .poll-actions button {
+    width: 100%;
+  }
+}
+
 /* Hover effect for buttons */
 .poll-actions button:hover {
   opacity: 0.9;

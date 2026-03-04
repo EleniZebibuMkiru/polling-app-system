@@ -38,3 +38,29 @@
   background-color: #34495e;
   color: #fff;
 }
+
+/* responsive tweaks */
+@media (max-width: 768px) {
+  .admin-navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 20px;
+  }
+
+  .admin-logo h1 {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+  }
+
+  .admin-nav-links {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .admin-nav-links li a {
+    display: block;
+    width: 100%;
+    padding: 10px;
+  }
+}

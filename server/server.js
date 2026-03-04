@@ -20,11 +20,13 @@ app.use(express.json()); // Parse JSON requests
 const authRoutes = require("./routes/authRoutes");   // Registration & Login
 const pollRoutes = require("./routes/pollRoutes");   // Poll management
 const voteRoutes = require("./routes/voteRoutes");   // User vote history & updates
+const userRoutes = require("./routes/userRoutes");   // Admin user management
 
 // ================= ROUTES =================
 app.use("/api/auth", authRoutes);
 app.use("/api/polls", pollRoutes); // All poll-related endpoints
 app.use("/api/votes", voteRoutes); // Vote history and editing
+app.use("/api/users", userRoutes); // Admin only user listing
 
 // ================= TEST ROUTE =================
 app.get("/", (req, res) => {

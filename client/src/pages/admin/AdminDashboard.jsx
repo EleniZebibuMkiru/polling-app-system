@@ -35,7 +35,8 @@ function AdminDashboard() {
   }, [navigate]);
 
   // Compute dashboard stats
-  const activePolls = polls.filter((p) => p.status === "active" || !p.status);
+  // polls with status "open" are considered active on dashboard
+  const activePolls = polls.filter((p) => p.status === "open");
   const closedPolls = polls.filter((p) => p.status === "closed");
   const totalVotes = polls.reduce(
     (sum, poll) =>

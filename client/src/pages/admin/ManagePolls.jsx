@@ -46,8 +46,9 @@ function ManagePolls() {
 
   const toggleStatus = async (poll) => {
     try {
-      const newStatus = poll.status === "active" ? "closed" : "active";
-      await API.patch(`/polls/${poll.id}/status`, { status: newStatus });
+      // backend uses "open"/"closed" for status
+      const newStatus = poll.status === "open" ? "closed" : "open";
+      await API.put(`/polls/${poll.id}/status`, { status: newStatus });
       setPolls(polls.map((p) => (p.id === poll.id ? { ...p, status: newStatus } : p)));
     } catch (err) {
       alert(err.response?.data?.message || "Failed to update status");
@@ -72,7 +73,7 @@ function ManagePolls() {
           <div className="poll-actions">
             <button onClick={() => navigate(`/admin/results/${p.id}`)}>View Results</button>
             <button onClick={() => toggleStatus(p)}>
-              {p.status === "active" ? "Close" : "Reopen"}
+              {p.status === "open" ? "Close" : "Reopen"}
             </button>
             <button onClick={() => handleDelete(p.id)}>Delete</button>
           </div>

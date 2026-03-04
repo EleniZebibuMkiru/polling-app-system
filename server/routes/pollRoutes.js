@@ -27,4 +27,7 @@ router.get("/results/:id", protect, pollController.getPollResults);
 // Toggle poll status (open/closed)
 router.put("/:id/status", protect, pollController.toggleStatus);
 
+// Delete a poll (and its options/votes via cascade)
+router.delete("/:id", protect, pollController.deletePoll);
+
 module.exports = router; // ✅ Export router

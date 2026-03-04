@@ -222,3 +222,18 @@ exports.toggleStatus = async (req, res) => {
   }
 };
 
+// ================= DELETE POLL =================
+exports.deletePoll = async (req, res) => {
+  try {
+    const pollId = req.params.id;
+    const poll = await query("SELECT * FROM polls WHERE id = ?", [pollId]);
+    if (!poll.length) return res.status(404).json({ message: "Poll not found" });
+
+    await query("DELETE FROM polls WHERE id = ?", [pollId]);
+    res.json({ message: "Poll deleted successfully" });
+  } catch (err) {
+    console.error("Error in deletePoll:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
