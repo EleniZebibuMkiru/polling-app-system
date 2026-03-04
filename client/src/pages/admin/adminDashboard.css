@@ -55,6 +55,29 @@
   color: #1f2937;
 }
 
+/* Tooltip shown on hover */
+.dashboard-card .tooltip {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  white-space: pre-line;
+  margin-top: 6px;
+  z-index: 10;
+  text-align: left;
+  max-width: 280px;
+}
+
+/* ensure card is position relative for tooltip */
+.dashboard-card {
+  position: relative;
+}
+
 /* Action buttons container */
 .dashboard-actions {
   margin-top: 20px;

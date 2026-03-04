@@ -44,6 +44,34 @@ function AdminDashboard() {
     0
   );
 
+  // tooltip state for hover details
+  const [hoveredCard, setHoveredCard] = useState(null);
+
+  const getTooltipContent = () => {
+    if (!hoveredCard) return "";
+    switch (hoveredCard) {
+      case "active":
+        return activePolls.length
+          ? activePolls.map((p) => p.question).join("\n")
+          : "No active polls";
+      case "closed":
+        return closedPolls.length
+          ? closedPolls.map((p) => p.question).join("\n")
+          : "No closed polls";
+      case "votes":
+        if (!polls.length) return "No polls";
+        return polls
+          .map(
+            (p) =>
+              `${p.question}: ${p.options
+                .reduce((a, o) => a + (o.votes_count || 0), 0)} votes`
+          )
+          .join("\n");
+      default:
+        return "";
+    }
+  };
+
   if (loading) return <p>Loading dashboard...</p>;
   if (error) return <p className="error">{error}</p>;
 
@@ -54,17 +82,50 @@ function AdminDashboard() {
       <h1>Admin Dashboard</h1>
 
       <div className="dashboard-grid">
-        <div className="dashboard-card">
+        <div
+          className="dashboard-card"
+          onMouseEnter={() => setHoveredCard("active")}
+          onMouseLeave={() => setHoveredCard(null)}
+        >
           <h2>Active Polls</h2>
           <p>{activePolls.length}</p>
+          {hoveredCard === "active" && (
+            <div className="tooltip">
+              {getTooltipContent().split("\n").map((line, i) => (
+                <div key={i}>{line}</div>
+              ))}
+            </div>
+          )}
         </div>
-        <div className="dashboard-card">
+        <div
+          className="dashboard-card"
+          onMouseEnter={() => setHoveredCard("closed")}
+          onMouseLeave={() => setHoveredCard(null)}
+        >
           <h2>Closed Polls</h2>
           <p>{closedPolls.length}</p>
+          {hoveredCard === "closed" && (
+            <div className="tooltip">
+              {getTooltipContent().split("\n").map((line, i) => (
+                <div key={i}>{line}</div>
+              ))}
+            </div>
+          )}
         </div>
-        <div className="dashboard-card">
+        <div
+          className="dashboard-card"
+          onMouseEnter={() => setHoveredCard("votes")}
+          onMouseLeave={() => setHoveredCard(null)}
+        >
           <h2>Total Votes</h2>
           <p>{totalVotes}</p>
+          {hoveredCard === "votes" && (
+            <div className="tooltip">
+              {getTooltipContent().split("\n").map((line, i) => (
+                <div key={i}>{line}</div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
