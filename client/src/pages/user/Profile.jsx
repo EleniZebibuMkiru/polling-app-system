@@ -20,7 +20,6 @@ function Profile() {
     navigate("/login");
   };
 
-  // 🔥 UPDATE PROFILE FUNCTION
   const handleUpdate = async () => {
     if (!name || !email) {
       setError("All fields are required!");
@@ -28,7 +27,7 @@ function Profile() {
     }
 
     try {
-      // ✅ Get JWT token from localStorage
+      //  Get JWT token from localStorage
       const token = localStorage.getItem("token");
 
       const res = await API.put(

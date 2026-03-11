@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import API from "../../api"; // Axios instance with backend URL
+import API from "../../api"; 
 
 function VoteForm({ poll, onVoteSuccess }) {
   const [selected, setSelected] = useState(null);

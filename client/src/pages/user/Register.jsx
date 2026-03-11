@@ -1,4 +1,4 @@
-// src/pages/user/Register.jsx
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
@@ -18,7 +18,7 @@ function Register({ setUser }) {
       const res = await API.post("/auth/register", { name, email, password });
       alert(res.data.message);
 
-      // Optional: auto-login after registration
+      //  auto-login after registration
       const loginRes = await API.post("/auth/login", { email, password });
       setUser(loginRes.data.user);
       localStorage.setItem("currentUser", JSON.stringify(loginRes.data.user));
@@ -59,5 +59,5 @@ function Register({ setUser }) {
   );
 }
 
-// ✅ Make sure this is a default export
+
 export default Register;

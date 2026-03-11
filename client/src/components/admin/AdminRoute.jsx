@@ -1,11 +1,11 @@
-// src/components/admin/AdminRoute.jsx
+
 import React from "react";
 import { Navigate } from "react-router-dom";
 
 function AdminRoute({ user, children }) {
   // Wait until user is loaded from localStorage
   if (user === null) {
-    return <p>Loading...</p>; // Or a spinner if you like
+    return <p>Loading...</p>; 
   }
 
   // Redirect non-admin users

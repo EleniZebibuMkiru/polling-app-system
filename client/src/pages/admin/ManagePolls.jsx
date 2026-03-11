@@ -1,4 +1,4 @@
-// src/pages/admin/ManagePolls.jsx
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminNavbar from "../../components/admin/AdminNavbar";

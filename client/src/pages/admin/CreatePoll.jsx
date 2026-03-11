@@ -10,7 +10,6 @@ function CreatePoll() {
   const [question, setQuestion] = useState("");
   const [options, setOptions] = useState(["", ""]); // start with 2 options
   const [loading, setLoading] = useState(false);
-
   const addOption = () => setOptions([...options, ""]);
 
   const handleOptionChange = (index, value) => {

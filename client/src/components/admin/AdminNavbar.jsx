@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import "./adminNavbar.css"; // ✅ Import the CSS file
+import "./adminNavbar.css"; 
 
 function AdminNavbar() {
   return (
@@ -12,7 +12,6 @@ function AdminNavbar() {
         <li><Link to="/admin/create">Create</Link></li>
         <li><Link to="/admin/manage">Polls</Link></li>
         <li><Link to="/admin/users">Users</Link></li>
-        {/* results link is not a standalone page; use the "View Results" button in Manage Polls */}
       </ul>
     </nav>
   );
